@@ -1,0 +1,112 @@
+{
+    "structure_info": {
+        "lattice_param": 5.968,
+        "cell": [
+            [
+                0.0,
+                0.5,
+                0.5
+            ],
+            [
+                0.5,
+                0.0,
+                0.5
+            ],
+            [
+                0.5,
+                0.5,
+                0.0
+            ]
+        ],
+        "atoms": [
+            [
+                "Eu",
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    7
+                ]
+            ],
+            [
+                "S",
+                [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                [
+                    0,
+                    0,
+                    0
+                ]
+            ]
+        ],
+        "kgrid_hse": [
+            6,
+            6,
+            6
+        ],
+        "kgrid_pbe": [
+            8,
+            8,
+            8
+        ],
+        "num_kpts": 50,
+        "kpath": "XKGLWXG"
+    },
+    "general_flags": {
+        "algo": "D",
+        "ediff": 0.0001,
+        "encut": 300,
+        "ismear": 0,
+        "laechg": true,
+        "lasph": true,
+        "ldau": true,
+        "ldau_luj": {
+            "Eu": {
+                "L": 3,
+                "U": 8.50394,
+                "J": 0
+            },
+            "S": {
+                "L": -1,
+                "U": 0,
+                "J": 0
+            }
+        },
+        "lmaxmix": 6,
+        "lorbit": 11,
+        "nbands": 100,
+        "ncore": 8,
+        "nelm": 500,
+        "lsorbit": true,
+        "saxis": [
+            0,
+            0,
+            1
+        ]
+    },
+    "scf": {
+        "icharg": 2,
+        "istart": 0
+    },
+    "band": {
+        "icharg": 11,
+        "lcharg": false,
+        "lwave": false
+    },
+    "pbe": {
+        "xc": "pbe"
+    },
+    "hse": {
+        "xc": "hse06",
+        "aexx": 0.25,
+        "time": 0.4,
+        "ldiag": true
+    }
+}
