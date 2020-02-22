@@ -166,7 +166,7 @@ class delta_band(object):
         ispin_dftu, nbands_dftu, nkpts_dftu = self.readInfo(self.vasprun_dftu)
 
         if nbands_hse != nbands_dftu:
-            return print('Error: The band number of HSE and GGA+U are not match!')
+            raise Exception('Error: The band number of HSE and GGA+U are not match!')
 
         kpoints = [line for line in open(self.kpoints_hse) if line.strip()]
         kpts_diff = 0
@@ -175,7 +175,7 @@ class delta_band(object):
                 kpts_diff += 1
 
         if nkpts_hse - kpts_diff != nkpts_dftu:
-            return print('Error: The kpoints number of HSE and GGA+U are not match!')
+            raise Exception('Error: The kpoints number of HSE and GGA+U are not match!')
         
         run_hse = BSVasprun(self.vasprun_hse)
         bs_hse = run_hse.get_band_structure(self.kpoints_hse)
@@ -200,7 +200,7 @@ class delta_band(object):
             v_dftu.append(self.access_eigen(run_dftu,-1)[:,:,0])
 
         else:
-            return print('Error: The spin number of HSE and GGA+U are not match!')
+            raise Exception('Error: The spin number of HSE and GGA+U are not match!')
         
         v['hse'] = np.array(v_hse)
         v['dftu'] = np.array(v_dftu)
@@ -237,7 +237,7 @@ class delta_band(object):
         elif ispin_dftu == 2:
             continuous = (loc['dftu'][0][1] - loc['dftu'][0][0]) == 1 & (loc['dftu'][1][1] - loc['dftu'][1][0]) == 1
         else:
-            return print('Error: Check your ISPIN for GGA+U')
+            raise Exception('Error: Check your ISPIN for GGA+U')
 
         if bs_dftu.is_metal() == False or continuous == True:
 
