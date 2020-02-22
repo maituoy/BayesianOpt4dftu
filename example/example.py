@@ -7,7 +7,7 @@ VASP_RUN_COMMAND = 'mpirun -np 56 vasp_ncl'
 # Define the name for output file.
 OUTFILENAME = 'vasp.out'
 # Define the path direct to the VASP pesudopotential.
-VASP_PP_PATH = 'home/maituoy/pp_vasp/'
+VASP_PP_PATH = '/home/maituoy/pp_vasp/'
 
 
 def parse_argument():
