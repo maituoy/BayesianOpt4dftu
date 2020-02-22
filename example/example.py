@@ -26,6 +26,8 @@ def parse_argument():
     parser.add_argument('--alpha1', dest='alpha1', default=1)
     parser.add_argument('--alpha2', dest='alpha2', default=1)
     parser.add_argument('--threshold', dest='threshold', default=0.001)
+    
+    return parser
 
 
 def main():
