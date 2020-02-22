@@ -1,4 +1,4 @@
-from core import *
+from BayesianOpt4dftu.core import *
 import os
 import argparse
 
