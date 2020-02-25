@@ -1,5 +1,0 @@
-numpy
-ase
-pymatgen
-bayesian-optimization
-pandas

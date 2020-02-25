@@ -18,7 +18,7 @@ def parse_argument():
     alpha1: Weight coefficient of band gap in the objective function.
 
     alpha2: Weight coefficient of delta band in the objective function.
-    
+
     threshold: Convergence threshold of Bayesian optimization process.
     """
     parser = argparse.ArgumentParser(description='params')
@@ -26,7 +26,7 @@ def parse_argument():
     parser.add_argument('--alpha1', dest='alpha1', default=1)
     parser.add_argument('--alpha2', dest='alpha2', default=1)
     parser.add_argument('--threshold', dest='threshold', default=0.001)
-    
+
     return parser.parse_args()
 
 
@@ -41,21 +41,22 @@ def main():
     if os.path.exists('u.txt'):
         os.remove('u.txt')
     else:
-        obj = 0 
+        obj = 0
         threshold = args.threshold
         for i in range(30):
-            calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu')
+            calculate(command=VASP_RUN_COMMAND,
+                      outfilename=OUTFILENAME, method='dftu')
             db = delta_band(bandrange=10, path='./')
             db.deltaBand()
 
-            bayesianOpt = bayesOpt_DFTU(path='./', kappa=k, alpha_1=a1, alpha_2=a2 )
+            bayesianOpt = bayesOpt_DFTU(
+                path='./', kappa=k, alpha_1=a1, alpha_2=a2)
             obj_next = bayesianOpt.bo(1)
             if abs(obj_next - obj) <= threshold:
                 print("Optimization has been finished!")
                 break
             obj = obj_next
 
+
 if __name__ == "__main__":
     main()
-    
-

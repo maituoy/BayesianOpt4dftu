@@ -1,8 +1,0 @@
-README.md
-setup.py
-BayesOpt4dftu/core.py
-BayesOpt4dftu.egg-info/PKG-INFO
-BayesOpt4dftu.egg-info/SOURCES.txt
-BayesOpt4dftu.egg-info/dependency_links.txt
-BayesOpt4dftu.egg-info/requires.txt
-BayesOpt4dftu.egg-info/top_level.txt
