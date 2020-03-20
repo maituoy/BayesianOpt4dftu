@@ -1,6 +1,6 @@
 {
     "structure_info": {
-        "lattice_param": 5.968,
+        "lattice_param": 5.633,
         "cell": [
             [
                 0.0,
@@ -20,7 +20,7 @@
         ],
         "atoms": [
             [
-                "Eu",
+                "Ge",
                 [
                     0,
                     0,
@@ -29,15 +29,15 @@
                 [
                     0,
                     0,
-                    7
+                    0
                 ]
             ],
             [
-                "S",
+                "Ge",
                 [
-                    0.5,
-                    0.5,
-                    0.5
+                    0.25,
+                    0.25,
+                    0.25
                 ],
                 [
                     0,
@@ -47,53 +47,27 @@
             ]
         ],
         "kgrid_hse": [
-            6,
-            6,
-            6
+            5,
+            5,
+            5
         ],
         "kgrid_pbe": [
-            8,
-            8,
-            8
+            5,
+            5,
+            5
         ],
-        "num_kpts": 50,
-        "kpath": "XKGLWXG"
+        "num_kpts": 10,
+        "kpath": "LGX"
     },
     "general_flags": {
-        "algo": "D",
-        "ediff": 0.0001,
-        "encut": 300,
-        "ismear": 0,
-        "laechg": true,
-        "lasph": true,
-        "ldau": true,
-        "ldau_luj": {
-            "Eu": {
-                "L": 3,
-                "U": 0,
-                "J": 0
-            },
-            "S": {
-                "L": -1,
-                "U": 0,
-                "J": 0
-            }
-        },
-        "lmaxmix": 6,
-        "lorbit": 11,
-        "nbands": 100,
-        "ncore": 8,
-        "nelm": 500,
-        "lsorbit": true,
-        "saxis": [
-            0,
-            0,
-            1
-        ]
+        "encut": 450,
+        "sigma": 0.1
+
     },
     "scf": {
         "icharg": 2,
-        "istart": 0
+        "istart": 0,
+        "xc":"pbe"
     },
     "band": {
         "icharg": 11,
@@ -101,7 +75,16 @@
         "lwave": false
     },
     "pbe": {
-        "xc": "pbe"
+        "xc": "pbe",
+        "ldau": true,
+        "ldau_luj": {
+            "Ge": {
+                "L": 1,
+                "U": 0,
+                "J": 0
+            }
+        },
+        "lmaxmix": 2
     },
     "hse": {
         "xc": "hse06",
