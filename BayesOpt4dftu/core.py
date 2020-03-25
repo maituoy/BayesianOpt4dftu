@@ -381,7 +381,7 @@ def calculate(command, outfilename, method, import_kpath):
         calc.generate_input(olddir+'/%s/scf' %method,'scf','pbe',import_kpath)
         calc.generate_input(olddir+'/%s/band' %method,'band','pbe', import_kpath)
     elif method == 'hse':
-        calc.generate_input(olddir+'/%s/scf' %method,'scf','pbe', import_kpath)
+        calc.generate_input(olddir+'/%s/scf' %method,'scf','hse', import_kpath)
         
     try:
         os.chdir(olddir+'/%s/scf' %method)
