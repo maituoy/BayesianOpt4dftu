@@ -45,7 +45,7 @@ def main():
 
     os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
-    # calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
+    calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
     
     if os.path.exists('u.txt'):
         os.remove('u.txt')
