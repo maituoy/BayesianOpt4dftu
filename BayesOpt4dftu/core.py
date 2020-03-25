@@ -262,6 +262,7 @@ class delta_band(object):
             continuous = (loc['dftu'][0][1] - loc['dftu'][0][0]) == 1 & (loc['dftu'][1][1] - loc['dftu'][1][0]) == 1
         else:
             raise Exception('Check your ISPIN for GGA+U')
+        
 
         if bs_dftu.is_metal() == False or continuous == True:
 
@@ -279,10 +280,10 @@ class delta_band(object):
                 shifted_dftu = np.concatenate((shifted_dftu,
                                             (v['dftu'][1] - edge['dftu'][0][0])[:,loc['dftu'][1][0]-self.br+1:loc['dftu'][1][0]+1+self.br]),
                                             axis = 1)
-    
         n = shifted_hse.shape[0] * shifted_hse.shape[1]
-        delta_band = sum((1/n)*sum((shifted_hse - shifted_dftu)**2))**(1/2)
 
+        delta_band = sum((1/n)*sum((shifted_hse - shifted_dftu)**2))**(1/2)
+        
         if bs_dftu.is_metal()==False:
             gap = edge['dftu'][0][1] - edge['dftu'][0][0]
         else:
@@ -355,13 +356,13 @@ class bayesOpt_DFTU(object):
         U = [str(x) for x in points]
         with open('input.json', 'r') as f:
             data = json.load(f)
-            elements = list(data["general_flags"]["ldau_luj"].keys())
+            elements = list(data["pbe"]["ldau_luj"].keys())
             for i in range(len(opt_u_index)):
                 if opt_u_index[i]:
                     try:
-                        data["general_flags"]["ldau_luj"][elements[i]]["U"] = round(float(U[i]),1)
+                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i]),4)
                     except:
-                        data["general_flags"]["ldau_luj"][elements[i]]["U"] = round(float(U[i-1]),1)
+                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i-1]),4)
             f.close()
         
         with open('input.json', 'w') as f:

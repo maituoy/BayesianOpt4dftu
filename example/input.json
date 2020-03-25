@@ -52,22 +52,23 @@
             5
         ],
         "kgrid_pbe": [
-            5,
-            5,
-            5
+            6,
+            6,
+            6
         ],
-        "num_kpts": 10,
+        "num_kpts": 50,
         "kpath": "LGX"
     },
     "general_flags": {
         "encut": 450,
-        "sigma": 0.1
-
+        "sigma": 0.05,
+        "prec": "N",
+        "algo": "D"
     },
     "scf": {
         "icharg": 2,
         "istart": 0,
-        "xc":"pbe"
+        "xc": "pbe"
     },
     "band": {
         "icharg": 11,
@@ -80,7 +81,7 @@
         "ldau_luj": {
             "Ge": {
                 "L": 1,
-                "U": 0,
+                "U": -1.9895,
                 "J": 0
             }
         },

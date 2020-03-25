@@ -23,8 +23,8 @@ def parse_argument():
     """
     parser = argparse.ArgumentParser(description='params')
     parser.add_argument('--which_u', dest='which_u', type=tuple, default=(1,0))
-    parser.add_argument('--br', dest='br', type=int, default=5)
-    parser.add_argument('--kappa', dest='kappa', type=float, default=7.5)
+    parser.add_argument('--br', dest='br', type=int, default=4)
+    parser.add_argument('--kappa', dest='kappa', type=float, default=2.5)
     parser.add_argument('--alpha1', dest='alpha1', type=float, default=1)
     parser.add_argument('--alpha2', dest='alpha2', type=float, default=1)
     parser.add_argument('--threshold', dest='threshold', type=float, default=0.001)
@@ -45,7 +45,7 @@ def main():
 
     os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
-    calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
+    # calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
     
     if os.path.exists('u.txt'):
         os.remove('u.txt')
@@ -53,7 +53,7 @@ def main():
     obj = 0 
     threshold = args.threshold
     for i in range(50):
-        calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu')
+        calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu', import_kpath = import_kpath)
         db = delta_band(bandrange=br, path='./')
         db.deltaBand()
 

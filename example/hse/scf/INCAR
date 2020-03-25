@@ -1,6 +1,8 @@
 INCAR created by Atomic Simulation Environment
  ENCUT = 450.000000
- SIGMA = 0.100000
+ SIGMA = 0.050000
+ ALGO = D
  GGA = PE
+ PREC = N
  ICHARG = 2
  ISTART = 0

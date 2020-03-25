@@ -2,9 +2,11 @@ INCAR created by Atomic Simulation Environment
  AEXX = 0.250000
  ENCUT = 450.000000
  HFSCREEN = 0.200000
- SIGMA = 0.100000
+ SIGMA = 0.050000
  TIME = 0.400000
+ ALGO = D
  GGA = PE
+ PREC = N
  ICHARG = 11
  LCHARG = .FALSE.
  LDIAG = .TRUE.
