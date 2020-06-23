@@ -1,0 +1,13 @@
+INCAR created by Atomic Simulation Environment
+ ENCUT = 300.000000
+ SIGMA = 0.050000
+ EDIFF = 1.00e-04
+ ALGO = D
+ GGA = PE
+ PREC = N
+ ICHARG = 2
+ ISTART = 0
+ SAXIS = 0.0000 0.0000 1.0000 
+ LSORBIT = .TRUE.
+ ISPIN = 2
+ MAGMOM = 2*0.0000 1*0.0000 2*0.0000 1*0.0000 

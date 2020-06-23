@@ -20,6 +20,12 @@ from bayes_opt import BayesianOptimization
 from string import ascii_lowercase
 from BayesOpt4dftu.special_kpath import kpath_dict
 
+# TODO: 1. SCF calculation in DFT+U missing U tags in INCAR.
+#       2. Check whether the U value has an duplicate in u.txt.
+#       3. Add header in u.txt
+#       4. Modify the BO for multi-U condition (More than 2 U values need to be optimized).
+#       5. Fix the bug that code output incorrect U in when U values are optimized for elements without the first one.
+
 def readgap(vasprun, kpoints):
     run = BSVasprun(vasprun)
     bs = run.get_band_structure(kpoints)
@@ -121,6 +127,8 @@ class vasp_init(object):
         flags.update(self.general_flags)
         flags.update(self.input_dict[step])
         if step == 'scf':
+            if xc == 'pbe':
+                flags.update(self.input_dict[xc])
             calc = Vasp2(self.atoms,directory=directory,kpts=self.struct_info['kgrid_'+xc],gamma=True,**flags)
             calc.write_input(self.atoms)
             if str(self.atoms.symbols) in ['Ni2O2']:
@@ -139,6 +147,7 @@ class vasp_init(object):
             if xc == 'pbe':
                 self.kpt4pbeband(directory, import_kpath)
             elif xc == 'hse':
+                print(directory)
                 self.kpt4hseband(directory, import_kpath)
             
 
@@ -340,12 +349,13 @@ class bayesOpt_DFTU(object):
             for (value, variable) in zip(values, variables_string):
                 params[variable] = value
             target = self.loss(self.gap, list(data.iloc[i])[-2],list(data.iloc[i])[-1],self.a1,self.a2)
+
             optimizer.register(
                                params=params,
                                target=target,
                               )
-        
         next_point_to_probe = optimizer.suggest(utility)
+        
         points = list(next_point_to_probe.values())
         # if num_variables == 1:
         #     if opt_u_index[0] == 1 and opt_u_index[1] == 0:
@@ -382,6 +392,8 @@ def calculate(command, outfilename, method, import_kpath):
         calc.generate_input(olddir+'/%s/band' %method,'band','pbe', import_kpath)
     elif method == 'hse':
         calc.generate_input(olddir+'/%s/scf' %method,'scf','hse', import_kpath)
+        if not os.path.exists(olddir+'/%s/band' %method):
+            os.mkdir(olddir+'/%s/band' %method)
         
     try:
         os.chdir(olddir+'/%s/scf' %method)

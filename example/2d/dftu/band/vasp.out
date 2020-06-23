@@ -1,0 +1,86 @@
+ running on   56 total cores
+ distrk:  each k-point on   56 cores,    1 groups
+ distr:  one band on    1 cores,   56 groups
+ using from now: INCAR     
+ vasp.5.4.4.18Apr17-6-g9f103f2a35 (build Nov 08 2017 12:56:59) complex          
+  
+ POSCAR found type information on POSCAR  In As
+ POSCAR found :  2 types and       2 ions
+ scaLAPACK will be used
+
+ ----------------------------------------------------------------------------- 
+|                                                                             |
+|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |
+|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |
+|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |
+|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |
+|           WW  WW  A    A  R   R   N   NN  II  N   NN  G    G                |
+|           W    W  A    A  R    R  N    N  II  N    N   GGGG   !!!           |
+|                                                                             |
+|      For optimal performance we recommend to set                            |
+|        NCORE= 4 - approx SQRT( number of cores)                             |
+|      NCORE specifies how many cores store one orbital (NPAR=cpu/NCORE).     |
+|      This setting can  greatly improve the performance of VASP for DFT.     |
+|      The default,   NCORE=1            might be grossly inefficient         |
+|      on modern multi-core architectures or massively parallel machines.     |
+|      Do your own testing !!!!                                               |
+|      Unfortunately you need to use the default for GW and RPA calculations. |
+|      (for HF NCORE is supported but not extensively tested yet)             |
+|                                                                             |
+ ----------------------------------------------------------------------------- 
+
+ LDA part: xc-table for Pade appr. of Perdew
+ found WAVECAR, reading the header
+  number of k-points has changed, file:    22 present:   100
+  trying to continue reading WAVECAR, but it might fail
+ WARNING: stress and forces are not correct
+ POSCAR, INCAR and KPOINTS ok, starting setup
+ FFT: planning ...
+ reading WAVECAR
+ the WAVECAR file was read successfully
+ reading imaginary part of occupancies ...
+ charge-density read from file: unknown                                 
+ reading imaginary part of occupancies ...
+ magnetization density read from file 1
+ reading imaginary part of occupancies ...
+ magnetization density read from file 2
+ reading imaginary part of occupancies ...
+ magnetization density read from file 3
+ entering main loop
+       N       E                     dE             d eps       ncg     rms          ort
+ gam= 0.000 g(H,U,f)=  0.561E+01 0.335E+02-0.108E-12 ort(H,U,f) = 0.000E+00 0.000E+00 0.000E+00
+SDA:   1     0.517950570107E+02    0.51795E+02   -0.15636E+02  5600   0.391E+02 0.000E+00
+ gam= 0.382 g(H,U,f)=  0.258E+01 0.202E+02-0.154E-02 ort(H,U,f) = 0.362E+01 0.238E+02-0.183E-02
+DMP:   2     0.391022714529E+02   -0.12693E+02   -0.13302E+02  5600   0.228E+02 0.274E+02
+ gam= 0.382 g(H,U,f)=  0.901E+00 0.251E+02-0.136E+00 ort(H,U,f) = 0.204E+01 0.470E+02-0.317E+00
+DMP:   3     0.226599127253E+02   -0.16442E+02   -0.17803E+02  5600   0.259E+02 0.487E+02
+ gam= 0.382 g(H,U,f)=  0.227E+00 0.134E+02 0.101E+00 ort(H,U,f) = 0.430E+00 0.318E+02 0.301E+00
+DMP:   4     0.556734616276E+01   -0.17093E+02   -0.10466E+02  5600   0.137E+02 0.326E+02
+ gam= 0.382 g(H,U,f)=  0.117E+00 0.599E+01-0.595E-01 ort(H,U,f) = 0.621E-01 0.163E+02-0.127E+00
+DMP:   5    -0.281775368505E+01   -0.83851E+01   -0.49037E+01  5600   0.604E+01 0.163E+02
+ gam= 0.382 g(H,U,f)=  0.665E-01 0.261E+01 0.640E-04 ort(H,U,f) = 0.542E-01 0.788E+01 0.141E-03
+DMP:   6    -0.743381118844E+01   -0.46161E+01   -0.22809E+01  5600   0.267E+01 0.793E+01
+ gam= 0.382 g(H,U,f)=  0.257E-01 0.106E+01-0.541E-03 ort(H,U,f) = 0.299E-01 0.345E+01-0.164E-02
+DMP:   7    -0.935937201029E+01   -0.19256E+01   -0.96463E+00  5600   0.108E+01 0.348E+01
+ gam= 0.382 g(H,U,f)=  0.939E-02 0.454E+00-0.664E-05 ort(H,U,f) = 0.859E-02 0.159E+01-0.312E-04
+DMP:   8    -0.101586401476E+02   -0.79927E+00   -0.42938E+00  5600   0.463E+00 0.160E+01
+ gam= 0.382 g(H,U,f)=  0.377E-02 0.193E+00 0.730E-02 ort(H,U,f) = 0.202E-02 0.717E+00 0.265E-01
+DMP:   9    -0.105200952605E+02   -0.36146E+00   -0.19537E+00  5600   0.204E+00 0.745E+00
+ gam= 0.382 g(H,U,f)=  0.146E-02 0.776E-01-0.315E-03 ort(H,U,f) = 0.634E-03 0.306E+00-0.123E-02
+DMP:  10    -0.106798472841E+02   -0.15975E+00   -0.78133E-01  5600   0.787E-01 0.305E+00
+ gam= 0.382 g(H,U,f)=  0.586E-03 0.295E-01-0.984E-04 ort(H,U,f) = 0.239E-03 0.123E+00-0.421E-03
+DMP:  11    -0.107438125549E+02   -0.63965E-01   -0.30799E-01  5600   0.300E-01 0.123E+00
+ gam= 0.382 g(H,U,f)=  0.251E-03 0.106E-01 0.264E-05 ort(H,U,f) = 0.142E-03 0.471E-01 0.208E-04
+DMP:  12    -0.107687371300E+02   -0.24925E-01   -0.11582E-01  5600   0.109E-01 0.473E-01
+ gam= 0.382 g(H,U,f)=  0.100E-03 0.358E-02-0.190E-04 ort(H,U,f) = 0.906E-04 0.168E-01-0.809E-04
+DMP:  13    -0.107779349022E+02   -0.91978E-02   -0.40390E-02  5600   0.366E-02 0.169E-01
+ gam= 0.382 g(H,U,f)=  0.362E-04 0.111E-02-0.661E-07 ort(H,U,f) = 0.426E-04 0.562E-02 0.316E-06
+DMP:  14    -0.107810897292E+02   -0.31548E-02   -0.13253E-02  5600   0.115E-02 0.566E-02
+ gam= 0.382 g(H,U,f)=  0.130E-04 0.320E-03 0.517E-05 ort(H,U,f) = 0.154E-04 0.175E-02 0.274E-04
+DMP:  15    -0.107821129032E+02   -0.10232E-02   -0.40913E-03  5600   0.338E-03 0.179E-02
+ gam= 0.382 g(H,U,f)=  0.495E-05 0.834E-04 0.241E-05 ort(H,U,f) = 0.509E-05 0.503E-03 0.141E-04
+DMP:  16    -0.107824225732E+02   -0.30967E-03   -0.11609E-03  5600   0.908E-04 0.522E-03
+ gam= 0.382 g(H,U,f)=  0.194E-05 0.191E-04 0.690E-06 ort(H,U,f) = 0.180E-05 0.130E-03 0.462E-05
+DMP:  17    -0.107825080896E+02   -0.85516E-04   -0.29565E-04  5600   0.217E-04 0.137E-03
+ final diagonalization
+   1 F= -.10782508E+02 E0= -.10782622E+02  d E =0.341542E-03  mag=    -0.0000    -0.0000    -0.0000

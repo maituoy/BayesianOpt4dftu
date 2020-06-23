@@ -1,0 +1,93 @@
+ running on   56 total cores
+ distrk:  each k-point on   56 cores,    1 groups
+ distr:  one band on    1 cores,   56 groups
+ using from now: INCAR     
+ vasp.5.4.4.18Apr17-6-g9f103f2a35 (build Nov 08 2017 12:56:59) complex          
+  
+ POSCAR found type information on POSCAR  In As
+ POSCAR found :  2 types and       2 ions
+ scaLAPACK will be used
+
+ ----------------------------------------------------------------------------- 
+|                                                                             |
+|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |
+|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |
+|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |
+|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |
+|           WW  WW  A    A  R   R   N   NN  II  N   NN  G    G                |
+|           W    W  A    A  R    R  N    N  II  N    N   GGGG   !!!           |
+|                                                                             |
+|      For optimal performance we recommend to set                            |
+|        NCORE= 4 - approx SQRT( number of cores)                             |
+|      NCORE specifies how many cores store one orbital (NPAR=cpu/NCORE).     |
+|      This setting can  greatly improve the performance of VASP for DFT.     |
+|      The default,   NCORE=1            might be grossly inefficient         |
+|      on modern multi-core architectures or massively parallel machines.     |
+|      Do your own testing !!!!                                               |
+|      Unfortunately you need to use the default for GW and RPA calculations. |
+|      (for HF NCORE is supported but not extensively tested yet)             |
+|                                                                             |
+ ----------------------------------------------------------------------------- 
+
+ LDA part: xc-table for Pade appr. of Perdew
+
+ ----------------------------------------------------------------------------- 
+|                                                                             |
+|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |
+|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |
+|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |
+|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |
+|           WW  WW  A    A  R   R   N   NN  II  N   NN  G    G                |
+|           W    W  A    A  R    R  N    N  II  N    N   GGGG   !!!           |
+|                                                                             |
+|      Your generating k-point grid is not commensurate to the symmetry       |
+|      of the lattice.  This can cause   slow convergence with respect        |
+|      to k-points for HF type calculations                                   |
+|      suggested SOLUTIONS:                                                   |
+|       ) if not already the case, use automatic k-point generation           |
+|       ) shift your grid to Gamma (G) (e.g. required for hex or fcc lattice) |
+|                                                                             |
+ ----------------------------------------------------------------------------- 
+
+ found WAVECAR, reading the header
+  number of k-points has changed, file:    22 present:   122
+  trying to continue reading WAVECAR, but it might fail
+ WARNING: stress and forces are not correct
+ POSCAR, INCAR and KPOINTS ok, starting setup
+ FFT: planning ...
+ reading WAVECAR
+ the WAVECAR file was read successfully
+ reading imaginary part of occupancies ...
+ charge-density read from file: unknown                                 
+ reading imaginary part of occupancies ...
+ magnetization density read from file 1
+ reading imaginary part of occupancies ...
+ magnetization density read from file 2
+ reading imaginary part of occupancies ...
+ magnetization density read from file 3
+ entering main loop
+       N       E                     dE             d eps       ncg     rms          ort
+ gam= 0.000 g(H,U,f)=  0.790E-01 0.277E-01 0.187E-12 ort(H,U,f) = 0.000E+00 0.000E+00 0.000E+00
+SDA:   1    -0.917465689832E+01   -0.91747E+01   -0.42706E-01  6832   0.107E+00 0.000E+00
+ gam= 0.382 g(H,U,f)=  0.329E-01 0.194E-01-0.152E-06 ort(H,U,f) = 0.508E-01 0.225E-01-0.176E-06
+DMP:   2    -0.921064647245E+01   -0.35990E-01   -0.32142E-01  6832   0.523E-01 0.734E-01
+ gam= 0.382 g(H,U,f)=  0.709E-02 0.116E-01 0.138E-03 ort(H,U,f) = 0.236E-01 0.209E-01 0.248E-03
+DMP:   3    -0.923540639330E+01   -0.24760E-01   -0.14370E-01  6832   0.188E-01 0.447E-01
+ gam= 0.382 g(H,U,f)=  0.885E-03 0.673E-02 0.333E-02 ort(H,U,f) = 0.407E-02 0.144E-01 0.662E-02
+DMP:   4    -0.924949820059E+01   -0.14092E-01   -0.82118E-02  6832   0.109E-01 0.251E-01
+ gam= 0.382 g(H,U,f)=  0.375E-03 0.360E-02-0.528E-04 ort(H,U,f) =-0.312E-03 0.872E-02-0.121E-03
+DMP:   5    -0.925455579610E+01   -0.50576E-02   -0.28359E-02  6832   0.393E-02 0.829E-02
+ gam= 0.382 g(H,U,f)=  0.342E-03 0.185E-02-0.183E-08 ort(H,U,f) =-0.155E-03 0.487E-02-0.467E-08
+DMP:   6    -0.925692268899E+01   -0.23669E-02   -0.15961E-02  6832   0.219E-02 0.471E-02
+ gam= 0.382 g(H,U,f)=  0.192E-03 0.925E-03 0.798E-12 ort(H,U,f) = 0.133E-03 0.258E-02 0.548E-12
+DMP:   7    -0.925827463131E+01   -0.13519E-02   -0.86188E-03  6832   0.112E-02 0.272E-02
+ gam= 0.382 g(H,U,f)=  0.685E-04 0.456E-03 0.215E-13 ort(H,U,f) = 0.110E-03 0.133E-02 0.232E-13
+DMP:   8    -0.925897838490E+01   -0.70375E-03   -0.42908E-03  6832   0.524E-03 0.144E-02
+ gam= 0.382 g(H,U,f)=  0.201E-04 0.222E-03 0.185E-13 ort(H,U,f) = 0.348E-04 0.666E-03 0.252E-13
+DMP:   9    -0.925933279222E+01   -0.35441E-03   -0.20403E-03  6832   0.242E-03 0.701E-03
+ gam= 0.382 g(H,U,f)=  0.841E-05 0.108E-03 0.143E-13 ort(H,U,f) = 0.698E-05 0.330E-03 0.235E-13
+DMP:  10    -0.925950209415E+01   -0.16930E-03   -0.98068E-04  6832   0.116E-03 0.337E-03
+ gam= 0.382 g(H,U,f)=  0.363E-05 0.525E-04 0.108E-13 ort(H,U,f) = 0.282E-05 0.162E-03 0.197E-13
+DMP:  11    -0.925958410039E+01   -0.82006E-04   -0.47685E-04  6832   0.562E-04 0.165E-03
+ final diagonalization
+   1 F= -.92595841E+01 E0= -.92595930E+01  d E =0.268422E-04  mag=     0.0000     0.0000    -0.0000

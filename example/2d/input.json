@@ -1,0 +1,109 @@
+{
+    "structure_info": {
+        "lattice_param": 6.0584,
+        "cell": [
+            [
+                0.0,
+                0.5,
+                0.5
+            ],
+            [
+                0.5,
+                0.0,
+                0.5
+            ],
+            [
+                0.5,
+                0.5,
+                0.0
+            ]
+        ],
+        "atoms": [
+            [
+                "In",
+                [
+                    0,
+                    0,
+                    0
+                ],
+                [
+                    0,
+                    0,
+                    1e-06
+                ]
+            ],
+            [
+                "As",
+                [
+                    0.25,
+                    0.25,
+                    0.25
+                ],
+                [
+                    0,
+                    0,
+                    1e-06
+                ]
+            ]
+        ],
+        "kgrid_hse": [
+            6,
+            6,
+            6
+        ],
+        "kgrid_pbe": [
+            6,
+            6,
+            6
+        ],
+        "num_kpts": 20,
+        "kpath": "GXWLGK"
+    },
+    "general_flags": {
+        "encut": 300,
+        "sigma": 0.05,
+        "ediff": 0.0001,
+        "prec": "N",
+        "algo": "D",
+        "lsorbit": true,
+        "saxis": [
+            0,
+            0,
+            1
+        ]
+    },
+    "scf": {
+        "icharg": 2,
+        "istart": 0,
+        "xc": "pbe"
+    },
+    "band": {
+        "icharg": 11,
+        "lcharg": false,
+        "lwave": false
+    },
+    "pbe": {
+        "xc": "pbe",
+        "ldau": true,
+        "ldau_luj": {
+            "In": {
+                "L": 1,
+                "U": -3.7888,
+                "J": 0
+            },
+            "As": {
+                "L": 1,
+                "U": -3.3764,
+                "J": 0
+            }
+        },
+        "lmaxmix": 4
+    },
+    "hse": {
+        "xc": "hse06",
+        "aexx": 0.25,
+        "time": 0.4,
+        "ldiag": true,
+        "precfock": "Fast"
+    }
+}
