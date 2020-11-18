@@ -329,7 +329,7 @@ class bayesOpt_DFTU(object):
         pbounds = {}
         if num_variables == 1:
             pbounds[variables_string[0]] = u_range
-        elif num_variables == 2:
+        elif num_variables >= 2:
             for variable in variables_string:
                 pbounds[variable] = u_range
         
