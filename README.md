@@ -25,7 +25,7 @@ target materials.
 The flags can be added or removed. More flag keys can be found in the ASE VASP calculator.
 
 ## Installation
-* `python ./setup.py develop`
+* pip install BayesOpt4dftu
 
 ## Usage
 Before running, change the environment variables VASP_RUN_COMMAND, OUTFILENAME, and VASP_PP_PATH.
