@@ -10,5 +10,5 @@ INCAR created by Atomic Simulation Environment
  LDAU = .TRUE.
  LWAVE = .FALSE.
  LDAUL = 1
- LDAUU = -2.127
+ LDAUU = -1.359
  LDAUJ = 0.000

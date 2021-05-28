@@ -6,3 +6,8 @@ INCAR created by Atomic Simulation Environment
  PREC = N
  ICHARG = 2
  ISTART = 0
+ LMAXMIX = 2
+ LDAU = .TRUE.
+ LDAUL = 1
+ LDAUU = -1.359
+ LDAUJ = 0.000

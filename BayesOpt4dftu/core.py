@@ -237,6 +237,9 @@ class delta_band(object):
         
         v['hse'] = np.array(v_hse)
         v['dftu'] = np.array(v_dftu)
+        
+        # print(v['hse'][0][0])
+        # print(v['dftu'][0][0])
 
         edge = {}
         loc = {}
@@ -274,9 +277,10 @@ class delta_band(object):
                                 i[s] = [vbm_loc,vbm_loc + 1]
                             elif vbm_loc != vbm_loc_hse and cbm_loc == cbm_loc_hse:
                                 i[s] = [cbm_loc - 1,cbm_loc]
-                                
+
             edge[m] = spin
             loc[m] = i
+
         shifted_hse = np.concatenate(((v['hse'][0] - edge['hse'][0][0])[:,loc['hse'][0][0]-self.br+1:loc['hse'][0][0]+1],
                                   (v['hse'][0] - edge['hse'][0][1])[:,loc['hse'][0][1]:loc['hse'][0][1]+self.br]),
                                    axis = 1)
@@ -311,8 +315,9 @@ class delta_band(object):
                                             (v['dftu'][1] - edge['dftu'][0][0])[:,loc['dftu'][1][0]-self.br+1:loc['dftu'][1][0]+1+self.br]),
                                             axis = 1)
         n = shifted_hse.shape[0] * shifted_hse.shape[1]
-
+ 
         delta_band = sum((1/n)*sum((shifted_hse - shifted_dftu)**2))**(1/2)
+        # print(delta_band)
         
         if bs_dftu.is_metal()==False:
             gap = edge['dftu'][0][1] - edge['dftu'][0][0]
@@ -350,11 +355,10 @@ class bayesOpt_DFTU(object):
         pbounds = {}
         if num_variables == 1:
             pbounds[variables_string[0]] = u_range
-        elif num_variables >= 2:
+        elif num_variables == 2:
             for variable in variables_string:
                 pbounds[variable] = u_range
-        
-        utility = UtilityFunction(kind="ucb", kappa=self.kappa, xi=0.0)
+        utility = UtilityFunction(kind="ucb", kappa=self.kappa, xi=0)
         optimizer = BayesianOptimization(
                                         f=None,
                                         pbounds=pbounds,
@@ -383,7 +387,7 @@ class bayesOpt_DFTU(object):
         #         points.append(0)
         #     elif opt_u_index[0] == 0 and opt_u_index[1] == 1:
         #         points.insert(0,0)
-        points = [ round(elem,5) for elem in points]
+        points = [ round(elem,6) for elem in points]
         U = [str(x) for x in points]
         with open('input.json', 'r') as f:
             data = json.load(f)
@@ -391,9 +395,9 @@ class bayesOpt_DFTU(object):
             for i in range(len(opt_u_index)):
                 if opt_u_index[i]:
                     try:
-                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i]),4)
+                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i]),6)
                     except:
-                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i-1]),4)
+                        data["pbe"]["ldau_luj"][elements[i]]["U"] = round(float(U[i-1]),6)
             f.close()
         
         with open('input.json', 'w') as f:

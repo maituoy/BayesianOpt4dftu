@@ -12,7 +12,7 @@ INCAR created by Atomic Simulation Environment
  LDAU = .TRUE.
  LSORBIT = .TRUE.
  LDAUL = 1 1
- LDAUU = 2.311 -10.000
+ LDAUU = 3.976 -10.000
  LDAUJ = 0.000 0.000
  ISPIN = 2
  MAGMOM = 2*0.0000 1*0.0000 2*0.0000 1*0.0000 
