@@ -254,6 +254,27 @@ class delta_band(object):
                 cbm_loc = min(np.where(v[m][s] == cbm)[1])
                 spin[s] = [vbm,cbm]
                 i[s] = [vbm_loc,cbm_loc]
+
+                if bs_hse.is_metal():
+                    ref_point = float("-inf")
+                    for r in v[m][s][0]:
+                        if r >= ref_point and r <= efermi[m]:
+                            ref_point = r
+                    ref_loc = max(np.where(v[m][s][0] == ref_point)[0])
+                    spin[s] = [efermi[m],efermi[m]]
+                    i[s] = [int(ref_loc), int(ref_loc)+1]
+                
+                else:
+                    if m == 'dftu':
+                        if vbm_loc >= cbm_loc:
+                            vbm_loc_hse, cbm_loc_hse = loc['hse'][s]
+                            if vbm_loc == vbm_loc_hse and cbm_loc == cbm_loc_hse:
+                                continue                      
+                            elif vbm_loc == vbm_loc_hse and cbm_loc != cbm_loc_hse:
+                                i[s] = [vbm_loc,vbm_loc + 1]
+                            elif vbm_loc != vbm_loc_hse and cbm_loc == cbm_loc_hse:
+                                i[s] = [cbm_loc - 1,cbm_loc]
+                                
             edge[m] = spin
             loc[m] = i
         shifted_hse = np.concatenate(((v['hse'][0] - edge['hse'][0][0])[:,loc['hse'][0][0]-self.br+1:loc['hse'][0][0]+1],
