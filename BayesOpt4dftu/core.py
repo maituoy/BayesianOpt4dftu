@@ -22,6 +22,7 @@ from string import ascii_lowercase
 from BayesOpt4dftu.special_kpath import kpath_dict
 
 from vaspvis import Band
+from vaspvis.utils import get_bandgap
 
 # TODO: 1. SCF calculation in DFT+U missing U tags in INCAR.
 #       2. Check whether the U value has an duplicate in u.txt.
@@ -262,9 +263,16 @@ class delta_band(object):
             n = shifted_hse.shape[0] * shifted_hse.shape[1]
             delta_band = sum((1/n)*sum((shifted_hse - shifted_dftu)**2))**(1/2)
 
+            bg = get_bandgap(
+                folder=os.path.join(self.path, 'dftu/band'),
+                printbg=False,
+                method=1,
+                spin='both',
+            )
+
             incar = Incar.from_file('./dftu/band/INCAR')
             u = incar['LDAUU']
-            u.append(band_dftu.bg)
+            u.append(bg)
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
@@ -329,9 +337,16 @@ class delta_band(object):
 
             delta_band = np.mean([delta_band_up, delta_band_down])
 
+            bg = get_bandgap(
+                folder=os.path.join(self.path, 'dftu/band'),
+                printbg=False,
+                method=1,
+                spin='both',
+            )
+
             incar = Incar.from_file('./dftu/band/INCAR')
             u = incar['LDAUU']
-            u.append(band_dftu_up.bg)
+            u.append(bg)
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
