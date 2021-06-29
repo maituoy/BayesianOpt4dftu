@@ -184,10 +184,12 @@ class delta_band(object):
     def access_eigen(self, b, interpolate=False):
         wave_vectors = b._get_k_distance()
         eigenvalues = b.eigenvalues
-        _, eigenvalues_interp = b._get_interpolated_data(
-            wave_vectors=wave_vectors,
-            data=eigenvalues
-        )
+
+        if interpolate:
+            _, eigenvalues_interp = b._get_interpolated_data(
+                wave_vectors=wave_vectors,
+                data=eigenvalues
+            )
 
         if interpolate:
             return eigenvalues_interp
