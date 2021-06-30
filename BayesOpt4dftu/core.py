@@ -160,9 +160,10 @@ class vasp_init(object):
 
 
 class delta_band(object):
-    def __init__(self, bandrange=10, path='./', iteration=1):
+    def __init__(self, bandrange=10, path='./', iteration=1, interpolate=True):
         self.path = path
         self.br = bandrange
+        self.interpolate = interpolate
         self.vasprun_hse = os.path.join(path, 'hse/band/vasprun.xml')
         self.kpoints_hse = os.path.join(path, 'hse/band/KPOINTS')
         self.vasprun_dftu = os.path.join(path, 'dftu/band/vasprun.xml')
@@ -183,10 +184,12 @@ class delta_band(object):
     def access_eigen(self, b, interpolate=False):
         wave_vectors = b._get_k_distance()
         eigenvalues = b.eigenvalues
-        _, eigenvalues_interp = b._get_interpolated_data(
-            wave_vectors=wave_vectors,
-            data=eigenvalues
-        )
+
+        if interpolate:
+            _, eigenvalues_interp = b._get_interpolated_data(
+                wave_vectors=wave_vectors,
+                data=eigenvalues
+            )
 
         if interpolate:
             return eigenvalues_interp
@@ -233,29 +236,28 @@ class delta_band(object):
             raise Exception(
                 'The kpoints number of HSE and GGA+U are not match!')
 
-        interpolate = True
         new_n = 500
 
         if ispin_hse == 1 and ispin_dftu == 1:
             band_hse = Band(
                 folder=os.path.join(self.path, 'hse/band'),
                 spin='up',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
             )
             band_dftu = Band(
                 folder=os.path.join(self.path, 'dftu/band'),
                 spin='up',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
                 bandgap=True,
                 printbg=False,
             )
 
-            eigenvalues_hse = self.access_eigen(band_hse, interpolate=interpolate)
-            eigenvalues_dftu = self.access_eigen(band_dftu, interpolate=interpolate)
+            eigenvalues_hse = self.access_eigen(band_hse, interpolate=self.interpolate)
+            eigenvalues_dftu = self.access_eigen(band_dftu, interpolate=self.interpolate)
 
             shifted_hse = self.locate_and_shift_bands(eigenvalues_hse)
             shifted_dftu = self.locate_and_shift_bands(eigenvalues_dftu)
@@ -286,7 +288,7 @@ class delta_band(object):
             band_hse_up = Band(
                 folder=os.path.join(self.path, 'hse/band'),
                 spin='up',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
             )
@@ -294,7 +296,7 @@ class delta_band(object):
             band_dftu_up = Band(
                 folder=os.path.join(self.path, 'dftu/band'),
                 spin='up',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
                 bandgap=True,
@@ -304,7 +306,7 @@ class delta_band(object):
             band_hse_down = Band(
                 folder=os.path.join(self.path, 'hse/band'),
                 spin='down',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
             )
@@ -312,13 +314,13 @@ class delta_band(object):
             band_dftu_down = Band(
                 folder=os.path.join(self.path, 'dftu/band'),
                 spin='down',
-                interpolate=interpolate,
+                interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
             )
 
-            eigenvalues_hse_up = self.access_eigen(band_hse_up, interpolate=interpolate)
-            eigenvalues_dftu_up = self.access_eigen(band_dftu_up, interpolate=interpolate)
+            eigenvalues_hse_up = self.access_eigen(band_hse_up, interpolate=self.interpolate)
+            eigenvalues_dftu_up = self.access_eigen(band_dftu_up, interpolate=self.interpolate)
 
             shifted_hse_up = self.locate_and_shift_bands(eigenvalues_hse_up)
             shifted_dftu_up = self.locate_and_shift_bands(eigenvalues_dftu_up)
@@ -326,8 +328,8 @@ class delta_band(object):
             n_up = shifted_hse_up.shape[0] * shifted_hse_up.shape[1]
             delta_band_up = sum((1/n_up)*sum((shifted_hse_up - shifted_dftu_up)**2))**(1/2)
 
-            eigenvalues_hse_down = self.access_eigen(band_hse_down, interpolate=interpolate)
-            eigenvalues_dftu_down = self.access_eigen(band_dftu_down, interpolate=interpolate)
+            eigenvalues_hse_down = self.access_eigen(band_hse_down, interpolate=self.interpolate)
+            eigenvalues_dftu_down = self.access_eigen(band_dftu_down, interpolate=self.interpolate)
 
             shifted_hse_down = self.locate_and_shift_bands(eigenvalues_hse_down)
             shifted_dftu_down = self.locate_and_shift_bands(eigenvalues_dftu_down)
