@@ -8,7 +8,7 @@ import pymatgen as mg
 import xml.etree.ElementTree as ET
 
 from ase import Atoms, Atom
-from ase.calculators.vasp.vasp2 import Vasp2
+from ase.calculators.vasp.vasp import Vasp
 from ase.dft.kpoints import *
 
 from pymatgen.io.vasp.inputs import Incar, Kpoints, Potcar, Poscar
@@ -60,11 +60,6 @@ class vasp_init(object):
     def modify_poscar(self, path='./'):
         with open(path + '/POSCAR', 'r') as f:
             poscar = f.readlines()
-            ele = []
-            for i in list(self.atoms.symbols):
-                if i not in ele:
-                    ele.append(i)
-            poscar.insert(5, ' '.join(x for x in ele) + '\n')
             poscar[7] = 'Direct\n'
             f.close()
 
@@ -136,8 +131,8 @@ class vasp_init(object):
         if step == 'scf':
             if xc == 'pbe':
                 flags.update(self.input_dict[xc])
-            calc = Vasp2(self.atoms, directory=directory,
-                         kpts=self.struct_info['kgrid_'+xc], gamma=True, **flags)
+            calc = Vasp(self.atoms, directory=directory,
+                            kpts=self.struct_info['kgrid_'+xc], gamma=True, **flags)
             calc.write_input(self.atoms)
             if str(self.atoms.symbols) in ['Ni2O2']:
                 mom_list = {'Ni': 2, 'Mn': 5, 'Co': 3, 'Fe': 4}
@@ -149,7 +144,7 @@ class vasp_init(object):
             self.modify_poscar(path=directory)
         elif step == 'band':
             flags.update(self.input_dict[xc])
-            calc = Vasp2(self.atoms, directory=directory, gamma=True, **flags)
+            calc = Vasp(self.atoms, directory=directory, gamma=True, **flags)
             calc.write_input(self.atoms)
             self.modify_poscar(path=directory)
             if xc == 'pbe':
@@ -160,7 +155,7 @@ class vasp_init(object):
 
 
 class delta_band(object):
-    def __init__(self, bandrange=10, path='./', iteration=1, interpolate=True):
+    def __init__(self, bandrange=10, path='./', iteration=1, interpolate=False):
         self.path = path
         self.br = bandrange
         self.interpolate = interpolate
