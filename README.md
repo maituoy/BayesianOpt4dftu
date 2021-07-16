@@ -28,13 +28,13 @@ The flags can be added or removed. More flag keys can be found in the ASE VASP c
 
 * `pip install BayesOpt4dftu`
 
-
-
 ## Usage
 Before running, change the environment variables VASP_RUN_COMMAND, OUTFILENAME, and VASP_PP_PATH.
 
 * `cd example/`
 * `python ./example.py`
 
-
+## Citation
+Please cite the following work if you use this code.
+[1] M. Yu, S. Yang, C. Wu, N. Marom, Machine learning the Hubbard U parameter in DFT+ U using Bayesian optimization, npj Computational Materials, 6(1):1–6, 2020.
 
