@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='BayesOpt4dftu',
-    version='0.0.5',
+    version='0.0.8',
 #    description='???',
     long_description=long_description,
     long_description_content_type="text/markdown",

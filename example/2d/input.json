@@ -35,9 +35,9 @@
             [
                 "As",
                 [
-                    0.25,
-                    0.25,
-                    0.25
+                    0.75,
+                    0.75,
+                    0.75
                 ],
                 [
                     0,
@@ -47,30 +47,35 @@
             ]
         ],
         "kgrid_hse": [
-            6,
-            6,
-            6
+            7,
+            7,
+            7
         ],
         "kgrid_pbe": [
-            6,
-            6,
-            6
+            7,
+            7,
+            7
         ],
-        "num_kpts": 20,
+        "num_kpts": 50,
         "kpath": "GXWLGK"
     },
     "general_flags": {
-        "encut": 300,
+        "encut": 400,
         "sigma": 0.05,
-        "ediff": 0.0001,
+        "ediff": 1e-05,
         "prec": "N",
-        "algo": "D",
+        "algo": "Fast",
         "lsorbit": true,
         "saxis": [
             0,
             0,
             1
-        ]
+        ],
+        "nbands": 21,
+        "kpar": 4,
+        "npar": 7,
+        "bmix": 3,
+        "amin": 0.01
     },
     "scf": {
         "icharg": 2,
@@ -88,12 +93,12 @@
         "ldau_luj": {
             "In": {
                 "L": 1,
-                "U": 3.976462,
+                "U": -0.083406,
                 "J": 0
             },
             "As": {
                 "L": 1,
-                "U": -10.0,
+                "U": -7.014049,
                 "J": 0
             }
         },
