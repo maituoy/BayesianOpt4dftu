@@ -51,9 +51,9 @@ def main():
 	for i, u in enumerate(which_u):
 		header.append('U_ele_%s' % str(i+1))
 	
-	if os.path.exists('./u_temp.txt'):
-		os.remove('./u_temp.txt')
-		with open('./u_temp.txt', 'w') as f:
+	if os.path.exists('./u_tmp.txt'):
+		os.remove('./u_tmp.txt')
+		with open('./u_tmp.txt', 'w') as f:
 			f.write('%s delta_band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
 
 	obj = 0 
@@ -71,7 +71,7 @@ def main():
 		obj = obj_next 
 
 	bayesianOpt.plot_bo()  
-	os.system('mv ./u_temp.txt ./u_kappa_%s_a1_%s_a2_%s.txt' %(k, a1, a2))     
+	os.system('mv ./u_tmp.txt ./u_kappa_%s_a1_%s_a2_%s.txt' %(k, a1, a2))     
 
 if __name__ == "__main__":
 	main()

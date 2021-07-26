@@ -276,7 +276,7 @@ class delta_band(object):
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
-            with open('u.txt', 'a+') as f:
+            with open('u_tmp.txt', 'a+') as f:
                 f.write(output + '\n')
                 f.close
 
@@ -351,7 +351,7 @@ class delta_band(object):
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
-            with open('u.txt', 'a+') as f:
+            with open('u_tmp.txt', 'a+') as f:
                 f.write(output + '\n')
                 f.close
 
@@ -362,7 +362,7 @@ class delta_band(object):
 
 class bayesOpt_DFTU(object):
     def __init__(self, path, opt_u_index=(1, 1), u_range=(0, 10), kappa=2.5, alpha_1=1, alpha_2=1):
-        self.input = path + 'u.txt'
+        self.input = path + 'u_tmp.txt'
         self.gap = readgap(path + '/hse/band/vasprun.xml',
                            path + '/hse/band/KPOINTS')
         self.kappa = kappa
