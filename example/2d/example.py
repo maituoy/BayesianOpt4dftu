@@ -45,23 +45,23 @@ def main():
 
 	os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
-	#calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
+	calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
 	
-	# header = []
-	# for i, u in enumerate(which_u):
-	# 	header.append('U_ele_%s' % str(i+1))
+	header = []
+	for i, u in enumerate(which_u):
+		header.append('U_ele_%s' % str(i+1))
 	
-	# if os.path.exists('./u_temp.txt'):
-	# 	os.remove('./u_temp.txt')
-	# 	with open('./u_temp.txt', 'w') as f:
-	# 		f.write('%s delta_band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
+	if os.path.exists('./u_temp.txt'):
+		os.remove('./u_temp.txt')
+		with open('./u_temp.txt', 'w') as f:
+			f.write('%s delta_band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
 
 	obj = 0 
 	threshold = args.threshold
-	for i in range(1):
-		# calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu', import_kpath = import_kpath)
-		# db = delta_band(bandrange=br, path='./')
-		# db.deltaBand()
+	for i in range(50):
+		calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu', import_kpath = import_kpath)
+		db = delta_band(bandrange=br, path='./')
+		db.deltaBand()
 		
 		bayesianOpt = bayesOpt_DFTU(path='./', opt_u_index=which_u, u_range=urange, kappa=k, alpha_1=a1, alpha_2=a2 )
 		obj_next = bayesianOpt.bo()
