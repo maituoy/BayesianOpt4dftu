@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='BayesOpt4dftu',
-    version='0.0.9',
+    version='0.1.0',
 #    description='???',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -13,5 +13,5 @@ setup(
 #    author_email="???",
     url='https://github.com/maituoy/BayesianOpt4dftu',
     packages=['BayesOpt4dftu'],
-    install_requires=['numpy', 'ase', 'pymatgen', 'bayesian-optimization', 'pandas'],
+    install_requires=['numpy', 'ase', 'pymatgen', 'bayesian-optimization', 'pandas','vaspvis'],
 )

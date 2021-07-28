@@ -276,7 +276,7 @@ class delta_band(object):
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
-            with open('u_tmp.txt', 'a+') as f:
+            with open('u_tmp.txt', 'a') as f:
                 f.write(output + '\n')
                 f.close
 
@@ -351,7 +351,7 @@ class delta_band(object):
             u.append(delta_band)
             output = ' '.join(str(x) for x in u)
 
-            with open('u_tmp.txt', 'a+') as f:
+            with open('u_tmp.txt', 'a') as f:
                 f.write(output + '\n')
                 f.close
 
