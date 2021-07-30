@@ -53,8 +53,9 @@ def main():
 	
 	if os.path.exists('./u_tmp.txt'):
 		os.remove('./u_tmp.txt')
-		with open('./u_tmp.txt', 'w') as f:
-			f.write('%s band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
+		
+	with open('./u_tmp.txt', 'w+') as f:
+		f.write('%s band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
 
 	obj = 0 
 	threshold = args.threshold
