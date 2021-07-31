@@ -396,11 +396,17 @@ class bayesOpt_DFTU(object):
             random_state=1,
         )
         
+        check_duplicates = []
         for i in range(num_rows):
             values = list()
             for j in range(len(self.opt_u_index)):
                 if self.opt_u_index[j]:
                     values.append(data.iloc[i][j])
+            # Avoid duplicates in the sample space.
+            if values in check_duplicates:
+                values[0] = values[0] + 0.001
+            check_duplicates.append(values)
+
             params = {}
             for (value, variable) in zip(values, variables_string):
                 params[variable] = value
