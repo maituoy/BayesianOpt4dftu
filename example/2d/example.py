@@ -30,6 +30,7 @@ def parse_argument():
 	parser.add_argument('--threshold', dest='threshold', type=float, default=0.0001)
 	parser.add_argument('--urange', dest='urange', type=tuple, default=(-10,10))
 	parser.add_argument('--import_kpath', dest='import_kpath', type=bool, default=False)
+	parser.add_argument('--elements', dest='elements', type=tuple, default=('In', 'As'))
 
 	return parser.parse_args()
 
@@ -42,6 +43,7 @@ def main():
 	urange = tuple(float(x) for x in args.urange)
 	br = args.br
 	import_kpath = args.import_kpath
+	elements = args.elements
 
 	os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
@@ -64,14 +66,15 @@ def main():
 		db = delta_band(bandrange=br, path='./')
 		db.deltaBand()
 		
-		bayesianOpt = bayesOpt_DFTU(path='./', opt_u_index=which_u, u_range=urange, kappa=k, alpha_1=a1, alpha_2=a2 )
+		bayesianOpt = bayesOpt_DFTU(path='./', opt_u_index=which_u, u_range=urange, kappa=k, alpha_1=a1, alpha_2=a2, elements=elements )
 		obj_next = bayesianOpt.bo()
 		if abs(obj_next - obj) <= threshold:
 			print("Optimization has been finished!")
 			break
 		obj = obj_next 
 
-	bayesianOpt.plot_bo()  
+	bayesianOpt.plot()  
+
 	os.system('mv ./u_tmp.txt ./u_kappa_%s_a1_%s_a2_%s.txt' %(k, a1, a2))     
 
 if __name__ == "__main__":

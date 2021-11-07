@@ -27,20 +27,6 @@ from vaspvis.utils import get_bandgap
 from matplotlib import pyplot as plt
 from matplotlib import cm, gridspec
 
-# TODO: 1. SCF calculation in DFT+U missing U tags in INCAR.
-#       2. Check whether the U value has an duplicate in u.txt.
-#       3. Modify the BO for multi-U condition (More than 2 U values need to be optimized).
-#       4. Fix the bug that code output incorrect U in when U values are optimized for elements without the first one.
-
-
-def readgap(vasprun, kpoints):
-    run = BSVasprun(vasprun)
-    bs = run.get_band_structure(kpoints)
-    if (bs.is_metal() == False):
-        return bs.get_cbm()['energy']-bs.get_vbm()['energy']
-    else:
-        return 0
-
 
 class vasp_init(object):
     def __init__(self, input_path):
@@ -152,6 +138,7 @@ class vasp_init(object):
             if xc == 'pbe':
                 self.kpt4pbeband(directory, import_kpath)
             elif xc == 'hse':
+                print(directory)
                 self.kpt4hseband(directory, import_kpath)
 
 
@@ -358,99 +345,177 @@ class delta_band(object):
         else:
             raise Exception('The spin number of HSE and GGA+U are not match!')
 
-
-class bayesOpt_DFTU(object):
-    def __init__(self, path, opt_u_index=(1, 1), u_range=(0, 10), kappa=2.5, alpha_1=1, alpha_2=1):
-        self.input = path + 'u_tmp.txt'
-        self.gap = readgap(path + '/hse/band/vasprun.xml',
-                           path + '/hse/band/KPOINTS')
-        self.kappa = kappa
-        self.a1 = alpha_1
-        self.a2 = alpha_2
-        self.opt_u_index = np.array(opt_u_index) > 0
+class get_optimizer:
+    def __init__(self, utxt_path, opt_u_index, u_range, gap_hse, a1, a2, kappa):
+        data = pd.read_csv(utxt_path, header=0, delimiter="\s", engine='python')
+        self.opt_u_index = opt_u_index
         self.u_range = u_range
-        self.elements = {}
+        self.gap_hse = gap_hse
+        self.a1 = a1
+        self.a2 = a2
+        self.kappa = kappa
+        self.n_obs, _ = data.shape
+        self.data = data
+        self.utility_function = UtilityFunction(kind="ucb", kappa=kappa, xi=0)
 
     def loss(self, y, y_hat, delta_band, alpha_1, alpha_2):
         return -alpha_1 * (y - y_hat) ** 2 - alpha_2 * delta_band ** 2
     
-    def get_optimizer(self):
-        data = pd.read_csv(self.input, header=0,
-                           delimiter="\s", engine='python')
-        num_rows, d = data.shape
-        num_variables = sum(self.opt_u_index)
-        if num_variables > 2:
-            raise ValueError("BO larger than 2D are not supported yet!")
-        variables_string = ascii_lowercase[:num_variables]
+    def set_bounds(self):
+        # Set up the number of variables are going to be optimized.
+        num_variables = int(sum(self.opt_u_index))
+        variables_string = ['u_'+ str(i) for i, o in enumerate(self.opt_u_index) if o]
+
+        # Set up the U ranges for each variable.
         pbounds = {}
-        if num_variables == 1:
-            pbounds[variables_string[0]] = self.u_range
-        elif num_variables == 2:
-            for variable in variables_string:
-                pbounds[variable] = self.u_range
-        utility_function = UtilityFunction(kind="ucb", kappa=self.kappa, xi=0)
+        for variable in variables_string:
+            pbounds[variable] = self.u_range
+        return pbounds
+    
+    def optimizer(self):   
+        pbounds = self.set_bounds()  
         optimizer = BayesianOptimization(
             f=None,
             pbounds=pbounds,
             verbose=2,
             random_state=1,
         )
-        
-        check_duplicates = []
-        for i in range(num_rows):
-            values = list()
-            for j in range(len(self.opt_u_index)):
-                if self.opt_u_index[j]:
-                    values.append(data.iloc[i][j])
-            # Avoid duplicates in the sample space.
-            if values in check_duplicates:
-                values[0] = values[0] + 0.001
-            check_duplicates.append(values)
 
+        v_strings = list(pbounds.keys())
+        opt_index = [int(v.split('_')[1]) for v in v_strings]
+
+        for i in range(self.n_obs):
+            values = list()
+            for j in range(len(opt_index)):
+                values.append(self.data.iloc[i][j])
             params = {}
-            for (value, variable) in zip(values, variables_string):
+            for (value, variable) in zip(values, v_strings):
                 params[variable] = value
-            target = self.loss(self.gap, list(
-                data.iloc[i])[-2], list(data.iloc[i])[-1], self.a1, self.a2)
+            target = self.loss(self.gap_hse, 
+                               self.data.iloc[i].band_gap, 
+                               self.data.iloc[i].delta_band, 
+                               self.a1, 
+                               self.a2)
 
             optimizer.register(
                 params=params,
                 target=target,
             )
+        return optimizer, target
         
-        return utility_function, optimizer, target
 
-    def plot_bo(self, ratio=1):
-        utility_function, optimizer, target = self.get_optimizer()
-        plot_size = len(optimizer.res)*ratio
+class plot_bo(get_optimizer):
+    def __init__(self, utxt_path, opt_u_index, u_range, gap_hse, a1, a2, kappa, elements):
+        super().__init__(utxt_path, opt_u_index, u_range, gap_hse, a1, a2, kappa)
+        optimizer, target = self.optimizer()
+        self.optimizer = optimizer
+        self.target = target
+        self.elements = elements
+        self.optimal = 0
+    
+    def get_optimal(self, x, mu):
+        best_obj = mu.max()
+        best_index = np.where(mu == mu.max())[0][0]
+        best_u = x[best_index]
+        optimal = (best_u, best_obj)
+        return optimal
+        
+    def predict(self, ratio=1):
+        u = list(self.optimizer.res[0]["params"].keys())
+        dim = len(u)
+        plot_size = len(self.optimizer.res)*ratio
+        if dim == 1:
+            x = np.linspace(self.u_range[0], self.u_range[1], 10000).reshape(-1, 1)
+            x_obs = np.array([res["params"][u[0]] for res in self.optimizer.res]).reshape(-1,1)[:plot_size]
+            y_obs = np.array([res["target"] for res in self.optimizer.res])[:plot_size]
+            
+            self.optimizer._gp.fit(x_obs, y_obs)
+            mu, sigma = self.optimizer._gp.predict(x, return_std=True)
+            self.optimal = self.get_optimal(x, mu)
+
+            data4plot = {'mu': mu,
+                         'sigma': sigma,
+                         'x': x,
+                         'x_obs': x_obs,
+                         'y_obs': y_obs}
+
+            return data4plot
+        
+        if dim == 2:
+            x = y = np.linspace(self.u_range[0], self.u_range[1], 300)
+            X, Y = np.meshgrid(x, y)
+            x = X.ravel()
+            y = Y.ravel()
+            X = np.vstack([x, y]).T
+
+            x1_obs = np.array([[res["params"][u[0]]] for res in self.optimizer.res])[:plot_size]
+            x2_obs = np.array([[res["params"][u[1]]] for res in self.optimizer.res])[:plot_size]
+            y_obs = np.array([res["target"] for res in self.optimizer.res])[:plot_size]
+            obs = np.column_stack((x1_obs, x2_obs))
+
+            self.optimizer._gp.fit(obs, y_obs)
+            mu, sigma = self.optimizer._gp.predict(X, eval)
+            self.optimal = self.get_optimal(X, mu)
+
+            data4plot = {'mu': mu,
+                         'sigma': sigma,
+                         'obs': obs,
+                         'x1_obs': x1_obs,
+                         'x2_obs': x2_obs,
+                         'x': x,
+                         'y': y,
+                         'X': X}
+
+            return data4plot
+        
+        if dim == 3:
+            x = y = z = np.linspace(self.u_range[0], self.u_range[1], 100)
+            X, Y, Z= np.meshgrid(x, y, z)
+            x = X.ravel()
+            y = Y.ravel()
+            z = Z.ravel()
+            X = np.vstack([x, y, z]).T
+
+            x1_obs = np.array([[res["params"][u[0]]] for res in self.optimizer.res])[:plot_size]
+            x2_obs = np.array([[res["params"][u[1]]] for res in self.optimizer.res])[:plot_size]
+            x3_obs = np.array([[res["params"][u[2]]] for res in self.optimizer.res])[:plot_size]
+            y_obs = np.array([res["target"] for res in self.optimizer.res])[:plot_size]
+            obs = np.column_stack((x1_obs, x2_obs, x3_obs))
+
+            self.optimizer._gp.fit(obs, y_obs)
+            mu, sigma = self.optimizer._gp.predict(X, eval)
+            self.optimal = self.get_optimal(X, mu)
+
+            return mu, sigma
+
+    def plot(self, ratio=1):
+        u = list(self.optimizer.res[0]["params"].keys())
+        dim = len(u)
+        plot_size = len(self.optimizer.res)*ratio
         opt_eles = [ele for i, ele in enumerate(self.elements) if self.opt_u_index[i]]
 
-        if sum(self.opt_u_index) == 1:
-            x = np.linspace(self.u_range[0], self.u_range[1], 10000).reshape(-1, 1)
-            x_obs = np.array([res["params"]['a'] for res in optimizer.res]).reshape(-1,1)[:plot_size]
-            y_obs = np.array([res["target"] for res in optimizer.res])[:plot_size]
-
-            mu, sigma = posterior(optimizer, x_obs, y_obs, x)
-
+        if dim == 1:
+            d = self.predict()
             fig = plt.figure()
             gs = gridspec.GridSpec(2, 1) 
             axis = plt.subplot(gs[0])
             acq = plt.subplot(gs[1])
-            axis.plot(x_obs.flatten(), y_obs, 'D', markersize=8, label=u'Observations', color='r')
-            axis.plot(x, mu, '--', color='k', label='Prediction')
-            axis.fill(np.concatenate([x, x[::-1]]), 
-                    np.concatenate([mu - 1.9600 * sigma, (mu + 1.9600 * sigma)[::-1]]),
-                alpha=.6, fc='c', ec='None', label='95% confidence interval')
-            
+            axis.plot(d['x_obs'].flatten(), d['y_obs'], 'D', markersize=8, label=u'Observations', color='r')
+            axis.plot(d['x'], d['mu'], '--', color='k', label='Prediction')
+            axis.fill(np.concatenate([d['x'], d['x'][::-1]]), 
+                    np.concatenate([d['mu'] - 1.9600 * d['sigma'], (d['mu'] + 1.9600 * d['sigma'])[::-1]]),
+                    alpha=.6, fc='c', ec='None', label='95% confidence interval')
+                
             axis.set_xlim(self.u_range)
             axis.set_ylim((None, None))
             axis.set_ylabel('f(x)')
 
-            acq.plot(x, utility_function, label='Acquisition Function', color='purple')
-            acq.plot(x[np.argmax(utility_function)], np.max(utility_function), '*', markersize=15, 
+            utility = self.utility_function.utility(d['x'], self.optimizer._gp, 0)
+            acq.plot(d['x'], utility, label='Acquisition Function', color='purple')
+            acq.plot(d['x'][np.argmax(utility)], np.max(utility), '*', markersize=15, 
                     label=u'Next Best Guess', markerfacecolor='gold', markeredgecolor='k', markeredgewidth=1)
             acq.set_xlim(self.u_range)
-            acq.set_ylim((np.min(utility_function)-0.5,np.max(utility_function)+0.5))
+            acq.set_ylim((np.min(utility)-0.5,np.max(utility)+0.5))
             acq.set_ylabel('Acquisition')
             acq.set_xlabel('U (eV)')
             axis.legend(loc=4, borderaxespad=0.)
@@ -458,47 +523,52 @@ class bayesOpt_DFTU(object):
 
             plt.savefig('1D_kappa_%s_a1_%s_a2_%s.png' %(self.kappa, self.a1, self.a2), dpi = 400)
 
-        if sum(self.opt_u_index) == 2:
-            x = y = np.linspace(self.u_range[0], self.u_range[1], 300)
-            X, Y = np.meshgrid(x, y)
-            x = X.ravel()
-            y = Y.ravel()
-            X = np.vstack([x, y]).T[:, [1, 0]]
-
-            x1_obs = np.array([[res["params"]["a"]] for res in optimizer.res])[:plot_size]
-            x2_obs = np.array([[res["params"]["b"]] for res in optimizer.res])[:plot_size]
-            y_obs = np.array([res["target"] for res in optimizer.res])[:plot_size]
-            obs = np.column_stack((x1_obs, x2_obs))
-
-            optimizer._gp.fit(obs, y_obs)
-            mu, sigma = optimizer._gp.predict(X, eval)
-
+        if dim == 2:
+            
+            d = self.predict()
             fig, axis = plt.subplots(1, 2, figsize=(15,5))
             plt.subplots_adjust(wspace = 0.2)
             
-            axis[0].plot(x1_obs, x2_obs, 'D', markersize=4, color='k', label='Observations')
+            axis[0].plot(d['x1_obs'], d['x2_obs'], 'D', markersize=4, color='k', label='Observations')
             axis[0].set_title('Gaussian Process Predicted Mean',pad=10)
-            im1 = axis[0].hexbin(y, x, C=mu, cmap=cm.jet, bins=None)
-            axis[0].axis([x.min(), x.max(), y.min(), y.max()])
-            axis[0].set_xlabel('U_%s (eV)' %opt_eles[0],labelpad=5)
-            axis[0].set_ylabel('U_%s (eV)' %opt_eles[1],labelpad=10,va='center')
+            im1 = axis[0].hexbin(d['x'], d['y'], C=d['mu'], cmap=cm.jet, bins=None)
+            axis[0].axis([d['x'].min(), d['x'].max(), d['y'].min(), d['y'].max()])
+            axis[0].set_xlabel(r'U_%s (eV)' %opt_eles[0],labelpad=5)
+            axis[0].set_ylabel(r'U_%s (eV)' %opt_eles[1],labelpad=10,va='center')
             cbar1 = plt.colorbar(im1, ax = axis[0])
 
-            utility = utility_function.utility(X, optimizer._gp, optimizer.max)
-            axis[1].plot(x1_obs, x2_obs, 'D', markersize=4, color='k', label='Observations')
+            utility = self.utility_function.utility(d['X'], self.optimizer._gp, self.optimizer.max)
+            axis[1].plot(d['x1_obs'], d['x2_obs'], 'D', markersize=4, color='k', label='Observations')
             axis[1].set_title('Acquisition Function',pad=10)
-            axis[1].set_xlabel('U_%s (eV)' %opt_eles[0],labelpad=5)
-            axis[1].set_ylabel('U_%s (eV)' %opt_eles[1],labelpad=10,va='center')
-            im3 = axis[1].hexbin(y, x, C=utility, cmap=cm.jet, bins=None)
-            axis[1].axis([x.min(), x.max(), y.min(), y.max()])
-            cbar3 = plt.colorbar(im3, ax = axis[1])
+            axis[1].set_xlabel(r'U_%s (eV)' %opt_eles[0],labelpad=5)
+            axis[1].set_ylabel(r'U_%s (eV)' %opt_eles[1],labelpad=10,va='center')
+            im2 = axis[1].hexbin(d['x'], d['y'], C=utility, cmap=cm.jet, bins=None)
+            axis[1].axis([d['x'].min(), d['x'].max(), d['y'].min(), d['y'].max()])
+            cbar2 = plt.colorbar(im2, ax = axis[1])
 
             plt.savefig('2D_kappa_%s_a1_%s_a2_%s.png' %(self.kappa, self.a1, self.a2), dpi = 400)
 
+class bayesOpt_DFTU(plot_bo):
+    def __init__(self, 
+                 path, 
+                 opt_u_index=(1, 1, 0), 
+                 u_range=(0, 10), 
+                 a1=0.25, 
+                 a2=0.75, 
+                 kappa=2.5,
+                 elements=['ele1','ele2','ele3']):
+        gap_hse = get_bandgap(
+                                folder=os.path.join(path, 'hse/band'),
+                                printbg=False,
+                                method=1,
+                                spin='both',
+                              )
+        upath = "./u_kappa_%s_a1_%s_a2_%s.txt" %(kappa, a1, a2)
+        plot_bo.__init__(self, upath, opt_u_index, u_range, gap_hse, a1, a2, kappa, elements)
+
 
     def bo(self):
-        utility_function, optimizer, target = self.get_optimizer()
-        next_point_to_probe = optimizer.suggest(utility_function)
+        next_point_to_probe = self.optimizer.suggest(self.utility_function)
 
         points = list(next_point_to_probe.values())
         points = [round(elem, 6) for elem in points]
@@ -507,22 +577,22 @@ class bayesOpt_DFTU(object):
         with open('input.json', 'r') as f:
             data = json.load(f)
             elements = list(data["pbe"]["ldau_luj"].keys())
-            self.elements = elements
             for i in range(len(self.opt_u_index)):
                 if self.opt_u_index[i]:
                     try:
-                        data["pbe"]["ldau_luj"][elements[i]
+                        data["pbe"]["ldau_luj"][self.elements[i]
                                                 ]["U"] = round(float(U[i]), 6)
                     except:
-                        data["pbe"]["ldau_luj"][elements[i]
+                        data["pbe"]["ldau_luj"][self.elements[i]
                                                 ]["U"] = round(float(U[i-1]), 6)
             f.close()
 
         with open('input.json', 'w') as f:
             json.dump(data, f, indent=4)
             f.close()
-
-        return target
+            
+        return self.target
+    
 
 
 def calculate(command, outfilename, method, import_kpath):
