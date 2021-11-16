@@ -556,14 +556,18 @@ class bayesOpt_DFTU(plot_bo):
                  a1=0.25, 
                  a2=0.75, 
                  kappa=2.5,
-                 elements=['ele1','ele2','ele3']):
+                 elements=['ele1','ele2','ele3'],
+                 plot=False):
         gap_hse = get_bandgap(
                                 folder=os.path.join(path, 'hse/band'),
                                 printbg=False,
                                 method=1,
                                 spin='both',
                               )
-        upath = "./u_kappa_%s_a1_%s_a2_%s.txt" %(kappa, a1, a2)
+        if plot:
+            upath = "./u_kappa_%s_a1_%s_a2_%s.txt" %(kappa, a1, a2)
+        if not plot:
+            upath = './u_tmp.txt'
         plot_bo.__init__(self, upath, opt_u_index, u_range, gap_hse, a1, a2, kappa, elements)
 
 
