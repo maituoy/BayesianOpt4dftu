@@ -143,9 +143,10 @@ class vasp_init(object):
 
 
 class delta_band(object):
-    def __init__(self, bandrange=10, path='./', iteration=1, interpolate=False):
+    def __init__(self, bandrange=(5,5), path='./', iteration=1, interpolate=False):
         self.path = path
-        self.br = bandrange
+        self.br_vb = bandrange[0]
+        self.br_cb = bandrange[1]
         self.interpolate = interpolate
         self.vasprun_hse = os.path.join(path, 'hse/band/vasprun.xml')
         self.kpoints_hse = os.path.join(path, 'hse/band/KPOINTS')
@@ -192,8 +193,8 @@ class delta_band(object):
             vbm = 0.0
             cbm = 0.0
 
-        valence_bands = eigenvalues[below_index[-self.br:]]
-        conduction_bands = eigenvalues[above_index[:self.br]]
+        valence_bands = eigenvalues[below_index[-self.br_vb:]]
+        conduction_bands = eigenvalues[above_index[:self.br_cb]]
 
         valence_bands -= vbm
         conduction_bands -= cbm
