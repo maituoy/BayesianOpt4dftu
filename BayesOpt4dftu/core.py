@@ -138,6 +138,7 @@ class vasp_init(object):
             if xc == 'pbe':
                 self.kpt4pbeband(directory, import_kpath)
             elif xc == 'hse':
+                print(directory)
                 self.kpt4hseband(directory, import_kpath)
 
 
