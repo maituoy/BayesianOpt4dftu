@@ -1,32 +1,25 @@
-# general 
-ALGO = D        # Damped velocity friction algorithm
-PREC = N        # Normal precision
-EDIFF = 1e-5    # Convergence criteria for electronic converge
-NELM = 500      # Max number of electronic steps
-ENCUT = 400     # Cut off energy
-LASPH = True    # Include non-spherical contributions from gradient corrections
-NBANDS = 15    # Number of bands to include in the calculation
-BMIX = 3        # Mixing parameter for convergence
-AMIN = 0.01     # Mixing parameter for convergence 
-SIGMA = 0.05    # Width of smearing in eV
-
-# parallelization
-KPAR = 4        # The number of k-points to be treated in parallel
-NPAR = 7        # The number of bands to be treated in parallel
-
-# band 
-ICHARG = 0      # Calculate eigenvalues from preconverged CHGCAR
-ISMEAR = 0      # Fermi smearing
-LCHARG = False  # Does not write the CHG* files
-LWAVE = False   # Does not write the WAVECAR files (True for unfolding)
-LORBIT = 11     # Projected data (lm-decomposed PROCAR)
-
-# soc 
-LSORBIT = True  # Turn on spin-orbit coupling
-MAGMOM = 6*0 # Set the magnetic moment for each atom (3 for each atom)
-
-# hse 
-LHFCALC = True  # Determines if a hybrid functional is used
-HFSCREEN = 0.2  # Range-separation parameter
-AEXX = 0.25     # Fraction of exact exchange to be used
-PRECFOCK = Fast # Increases the speed of HSE Calculations
+INCAR created by Atomic Simulation Environment
+ AEXX = 0.250000
+ AMIN = 0.010000
+ BMIX = 3.000000
+ ENCUT = 400.000000
+ HFSCREEN = 0.200000
+ SIGMA = 0.050000
+ TIME = 0.400000
+ EDIFF = 1.00e-05
+ ALGO = D
+ GGA = PE
+ PREC = N
+ PRECFOCK = Fast
+ ICHARG = 11
+ KPAR = 6
+ NBANDS = 21
+ NCORE = 3
+ SAXIS = 0.0000 0.0000 1.0000 
+ LCHARG = .FALSE.
+ LDIAG = .TRUE.
+ LHFCALC = .TRUE.
+ LWAVE = .FALSE.
+ LSORBIT = .TRUE.
+ ISPIN = 2
+ MAGMOM = 2*0.0000 1*0.0000 2*0.0000 1*0.0000 

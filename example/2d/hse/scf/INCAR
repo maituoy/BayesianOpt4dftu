@@ -1,25 +1,18 @@
-# general 
-ALGO = Fast     # Mixture of Davidson and RMM-DIIS algos
-PREC = N        # Normal precision
-EDIFF = 1e-5    # Convergence criteria for electronic converge
-NELM = 500      # Max number of electronic steps
-ENCUT = 400     # Cut off energy
-LASPH = True    # Include non-spherical contributions from gradient corrections
-NBANDS = 15    # Number of bands to include in the calculation
-BMIX = 3        # Mixing parameter for convergence
-AMIN = 0.01     # Mixing parameter for convergence 
-SIGMA = 0.05    # Width of smearing in eV
-
-# parallelization
-KPAR = 4        # The number of k-points to be treated in parallel
-NPAR = 7        # The number of bands to be treated in parallel
-
-# scf 
-ICHARG = 2      # Generate CHG* from a superposition of atomic charge densities
-ISMEAR = 0      # Fermi smearing
-LCHARG = True   # Write the CHG* files
-LWAVE = True    # Does not write the WAVECAR
-
-# soc 
-LSORBIT = True  # Turn on spin-orbit coupling
-MAGMOM = 6*0 # Set the magnetic moment for each atom (3 for each atom)
+INCAR created by Atomic Simulation Environment
+ AMIN = 0.010000
+ BMIX = 3.000000
+ ENCUT = 400.000000
+ SIGMA = 0.050000
+ EDIFF = 1.00e-05
+ ALGO = D
+ GGA = PE
+ PREC = N
+ ICHARG = 2
+ ISTART = 0
+ KPAR = 6
+ NBANDS = 21
+ NCORE = 3
+ SAXIS = 0.0000 0.0000 1.0000 
+ LSORBIT = .TRUE.
+ ISPIN = 2
+ MAGMOM = 2*0.0000 1*0.0000 2*0.0000 1*0.0000 

@@ -3,7 +3,7 @@ import os
 import argparse
 
 # Command to run VASP executable.
-VASP_RUN_COMMAND = 'mpirun -np 56 vasp_ncl'
+VASP_RUN_COMMAND = 'srun -n 54 vasp_ncl'
 # Define the name for output file.
 OUTFILENAME = 'vasp.out'
 # Define the path direct to the VASP pesudopotential.
@@ -22,15 +22,15 @@ def parse_argument():
     threshold: Convergence threshold of Bayesian optimization process.
     """
     parser = argparse.ArgumentParser(description='params')
-    parser.add_argument('--which_u', dest='which_u',nargs='+', type=int, default=(1,1,0))
-    parser.add_argument('--br', dest='br', nargs='+', type=int, default=(12,4))
+    parser.add_argument('--which_u', dest='which_u',nargs='+', type=int, default=(1,1))
+    parser.add_argument('--br', dest='br', nargs='+', type=int, default=(5,5))
     parser.add_argument('--kappa', dest='kappa', type=float, default=5)
-    parser.add_argument('--alpha1', dest='alpha1', type=float, default=0)
-    parser.add_argument('--alpha2', dest='alpha2', type=float, default=1)
+    parser.add_argument('--alpha1', dest='alpha1', type=float, default=0.25)
+    parser.add_argument('--alpha2', dest='alpha2', type=float, default=0.75)
     parser.add_argument('--threshold', dest='threshold', type=float, default=0.0001)
-    parser.add_argument('--urange', dest='urange',nargs='+', type=int, default=(0,10))
+    parser.add_argument('--urange', dest='urange',nargs='+', type=int, default=(-10,10))
     parser.add_argument('--import_kpath', dest='import_kpath', type=bool, default=False)
-    parser.add_argument('--elements', dest='elements',nargs='+', type=str, default=('Pd', 'Mn', 'Sn'))
+    parser.add_argument('--elements', dest='elements',nargs='+', type=str, default=('In', 'As'))
 
 
     return parser.parse_args()
@@ -48,7 +48,7 @@ def main():
 
 	os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
-	calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
+	#calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='hse', import_kpath = import_kpath)
 	
 	header = []
 	for i, u in enumerate(which_u):
@@ -58,7 +58,7 @@ def main():
 		os.remove('./u_tmp.txt')
 		
 	with open('./u_tmp.txt', 'w+') as f:
-		f.write('%s band_gap(eV) delta_band(eV) \n' % (' '.join(header)))
+		f.write('%s band_gap delta_band \n' % (' '.join(header)))
 
 	obj = 0 
 	threshold = args.threshold
@@ -67,7 +67,7 @@ def main():
 		db = delta_band(bandrange=br, path='./')
 		db.deltaBand()
 		
-		bayesianOpt = bayesOpt_DFTU(path='./', opt_u_index=which_u, u_range=urange, kappa=k, alpha_1=a1, alpha_2=a2, elements=elements )
+		bayesianOpt = bayesOpt_DFTU(path='./', opt_u_index=which_u, u_range=urange, kappa=k, a1=a1, a2=a2, elements=elements)
 		obj_next = bayesianOpt.bo()
 		if abs(obj_next - obj) <= threshold:
 			print("Optimization has been finished!")

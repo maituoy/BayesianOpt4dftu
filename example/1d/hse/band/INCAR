@@ -8,7 +8,13 @@ INCAR created by Atomic Simulation Environment
  GGA = PE
  PREC = N
  ICHARG = 11
+ ISMEAR = 0
+ KPAR = 6
+ NBANDS = 54
+ NCORE = 3
  LCHARG = .FALSE.
  LDIAG = .TRUE.
  LHFCALC = .TRUE.
  LWAVE = .FALSE.
+ ISPIN = 2
+ MAGMOM = 2*0.0000 1*0.0000 2*0.0000 1*0.0000 

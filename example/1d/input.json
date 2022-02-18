@@ -29,7 +29,7 @@
                 [
                     0,
                     0,
-                    0
+                    1e-06
                 ]
             ],
             [
@@ -42,7 +42,7 @@
                 [
                     0,
                     0,
-                    0
+                    1e-06
                 ]
             ]
         ],
@@ -63,7 +63,10 @@
         "encut": 450,
         "sigma": 0.05,
         "prec": "N",
-        "algo": "D"
+        "algo": "D",
+        "kpar": 6,
+        "ncore": 3,
+        "nbands": 54
     },
     "scf": {
         "icharg": 2,
@@ -73,7 +76,8 @@
     "band": {
         "icharg": 11,
         "lcharg": false,
-        "lwave": false
+        "lwave": false,
+        "ismear": 0
     },
     "pbe": {
         "xc": "pbe",
@@ -81,7 +85,7 @@
         "ldau_luj": {
             "Ge": {
                 "L": 1,
-                "U": -1.2349,
+                "U": -2.325276,
                 "J": 0
             }
         },
