@@ -75,6 +75,7 @@ def main():
 		obj = obj_next 
 
 	bayesianOpt.plot()  
+	print(bayesianOpt.optimal) 
 
 	os.system('mv ./u_tmp.txt ./u_kappa_%s_a1_%s_a2_%s.txt' %(k, a1, a2))     
 

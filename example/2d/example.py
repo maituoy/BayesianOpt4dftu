@@ -31,6 +31,7 @@ def parse_argument():
     parser.add_argument('--urange', dest='urange',nargs='+', type=int, default=(-10,10))
     parser.add_argument('--import_kpath', dest='import_kpath', type=bool, default=False)
     parser.add_argument('--elements', dest='elements',nargs='+', type=str, default=('In', 'As'))
+    parser.add_argument('--iteration', dest='iter', type=int, default=50)
 
 
     return parser.parse_args()
@@ -45,6 +46,7 @@ def main():
 	br = tuple(args.br)
 	import_kpath = args.import_kpath
 	elements = args.elements
+	iteration = args.iter
 
 	os.environ['VASP_PP_PATH'] = VASP_PP_PATH
 
@@ -62,7 +64,7 @@ def main():
 
 	obj = 0 
 	threshold = args.threshold
-	for i in range(50):
+	for i in range(iteration):
 		calculate(command=VASP_RUN_COMMAND, outfilename=OUTFILENAME, method='dftu', import_kpath = import_kpath)
 		db = delta_band(bandrange=br, path='./')
 		db.deltaBand()
@@ -74,7 +76,8 @@ def main():
 			break
 		obj = obj_next 
 
-	bayesianOpt.plot()  
+	bayesianOpt.plot() 
+	print(bayesianOpt.optimal) 
 
 	os.system('mv ./u_tmp.txt ./u_kappa_%s_a1_%s_a2_%s.txt' %(k, a1, a2))     
 
