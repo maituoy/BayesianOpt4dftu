@@ -11,6 +11,7 @@ This code determines the Hubbard U parameters in DFT+U via Bayesian Optimization
 5. pymatgen (https://pymatgen.org/)
 6. bayesian-optimization https://github.com/fmfn/BayesianOptimization
 7. Vienna Ab initio Simulation Package (VASP) https://www.vasp.at/
+8. Vaspvis (https://github.com/DerekDardzinski/vaspvis)
 
 ## Set up the input file (input.json) before running the code 
 
