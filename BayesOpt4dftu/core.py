@@ -22,7 +22,7 @@ from string import ascii_lowercase
 from BayesOpt4dftu.special_kpath import kpath_dict
 
 from vaspvis import Band
-from vaspvis.utils import get_bandgap
+from vaspvis.utils import BandGap
 
 from matplotlib import pyplot as plt
 from matplotlib import cm, gridspec
@@ -236,8 +236,6 @@ class delta_band(object):
                 interpolate=self.interpolate,
                 new_n=new_n,
                 projected=False,
-                bandgap=True,
-                printbg=False,
             )
 
             eigenvalues_hse = self.access_eigen(band_hse, interpolate=self.interpolate)
@@ -249,12 +247,7 @@ class delta_band(object):
             n = shifted_hse.shape[0] * shifted_hse.shape[1]
             delta_band = sum((1/n)*sum((shifted_hse - shifted_dftu)**2))**(1/2)
 
-            bg = get_bandgap(
-                folder=os.path.join(self.path, 'dftu/band'),
-                printbg=False,
-                method=1,
-                spin='both',
-            )
+            bg = BandGap(folder=os.path.join(self.path, 'dftu/band'), method=1, spin='both',).bg
 
             incar = Incar.from_file('./dftu/band/INCAR')
             u = incar['LDAUU']
@@ -282,9 +275,7 @@ class delta_band(object):
                 spin='up',
                 interpolate=self.interpolate,
                 new_n=new_n,
-                projected=False,
-                bandgap=True,
-                printbg=False,
+                projected=False
             )
 
             band_hse_down = Band(
@@ -323,12 +314,7 @@ class delta_band(object):
 
             delta_band = np.mean([delta_band_up, delta_band_down])
 
-            bg = get_bandgap(
-                folder=os.path.join(self.path, 'dftu/band'),
-                printbg=False,
-                method=1,
-                spin='both',
-            )
+            bg = BandGap(folder=os.path.join(self.path, 'dftu/band'), method=1, spin='both',).bg
 
             incar = Incar.from_file('./dftu/band/INCAR')
             u = incar['LDAUU']
@@ -558,12 +544,7 @@ class bayesOpt_DFTU(plot_bo):
                  kappa=2.5,
                  elements=['ele1','ele2','ele3'],
                  plot=False):
-        gap_hse = get_bandgap(
-                                folder=os.path.join(path, 'hse/band'),
-                                printbg=False,
-                                method=1,
-                                spin='both',
-                              )
+        gap_hse = BandGap(folder=os.path.join(path, 'hse/band'), method=1, spin='both',).bg
         if plot:
             upath = "./u_kappa_%s_a1_%s_a2_%s.txt" %(kappa, a1, a2)
         if not plot:
