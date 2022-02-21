@@ -11,6 +11,7 @@ This code determines the Hubbard U parameters in DFT+U via Bayesian Optimization
 5. pymatgen (https://pymatgen.org/)
 6. bayesian-optimization https://github.com/fmfn/BayesianOptimization
 7. Vienna Ab initio Simulation Package (VASP) https://www.vasp.at/
+8. Vaspvis (https://github.com/DerekDardzinski/vaspvis)
 
 ## Set up the input file (input.json) before running the code 
 
@@ -124,7 +125,7 @@ I will use `/example/2d` as an example:
       
 #### 2. Arguments options
 
-  `--which_u` defines which element you would like to optimize the U for. For a unary substance, it has to be `(1,)`. For compounds with over 2 elements, you can set each element to 0 or 1 to switch on/off the optimization for that element. For InAs, when optimizing for both In and As, it will be `(1,1)`.
+  `--which_u` defines which element you would like to optimize the U for. For a unary substance, it has to be `(1,)`. For compounds with over 2 elements, you can set each element to 0 or 1 to switch off/on the optimization for that element. For InAs, when optimizing for both In and As, it will be `(1,1)`.
   
   `--br` defines band range you would like to include in your Δband. It is a tuple of two integers, which define the number of valence bands and conduction bands from the Fermi level.
   
