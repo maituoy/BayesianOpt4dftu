@@ -13,5 +13,5 @@ setup(
 #    author_email="???",
     url='https://github.com/maituoy/BayesianOpt4dftu',
     packages=['BayesOpt4dftu'],
-    install_requires=['numpy', 'ase==3.22.0', 'pymatgen==2022.0.16', 'bayesian-optimization==1.2.0', 'pandas','vaspvis==1.2.2'],
+    install_requires=['numpy', 'ase==3.22.0', 'pymatgen==2024.2.20', 'bayesian-optimization==1.2.0', 'pandas','vaspvis==1.2.2'],
 )
